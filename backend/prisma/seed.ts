@@ -1,4 +1,4 @@
-import { prisma } from "../src/lib/prisma";
+import { prisma } from "../src/lib/prisma.js";
 import { readFile } from "node:fs/promises"
 
 type RawCountry = {
@@ -7,6 +7,7 @@ type RawCountry = {
         common: string;
     };
     capital?: string[];
+    population?: number;
     currencies?: Record<
     string,
     {
@@ -32,27 +33,27 @@ async function main() {
     }
 
     const countriesToSeed = countries.map((country) => ({
-        code: firstCountry.cca2,
-        name: firstCountry.name.common,
-        capital: firstCountry.capital?.[0] ?? null,
-        population: 0, 
-        currency: Object.keys(firstCountry.currencies ?? {})[0] ?? null,
-        flag: firstCountry.flag ?? null,
-        continent: firstCountry.region,
+        code: country.cca2,
+        name: country.name.common,
+        capital: country.capital?.[0] ?? null,
+        population: country.population ?? null,
+        currency: Object.keys(country.currencies ?? {})[0] ?? null,
+        flag: country.flag ?? null,
+        continent: country.region,
     }));
 
+    const countryToSeed = countriesToSeed[0];
+    if (!countryToSeed) {
+  throw new Error("Fant ingen land å lagre");
+}
 
-/*
-    for(let country of countries){
-        await prisma.country.create({
-            data: country
-            cou
-
-        })
-
-    }
-   
-*/
+    await prisma.country.upsert({
+        where: {
+            code: countryToSeed.code,
+        },
+        update: countryToSeed,
+        create: countryToSeed,
+    });
 }
 
 main(); 
