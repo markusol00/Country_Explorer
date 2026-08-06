@@ -26,12 +26,6 @@ async function main() {
 
     const countries: RawCountry[] = JSON.parse(fileContent);
 
-    const firstCountry = countries[0];
-
-    if(!firstCountry){
-        throw new Error("No countries found in the JSON file");
-    }
-
     const countriesToSeed = countries.map((country) => ({
         code: country.cca2,
         name: country.name.common,
@@ -42,18 +36,19 @@ async function main() {
         continent: country.region,
     }));
 
-    const countryToSeed = countriesToSeed[0];
-    if (!countryToSeed) {
-  throw new Error("Fant ingen land å lagre");
+    if (!countriesToSeed.length) {
+  throw new Error("Found no countries to seed.");
 }
 
-    await prisma.country.upsert({
-        where: {
-            code: countryToSeed.code,
-        },
-        update: countryToSeed,
-        create: countryToSeed,
-    });
+    for(const country of countriesToSeed){
+        await prisma.country.upsert({
+            where: {
+                code: country.code,
+            },
+            update: country,
+            create: country,
+        })
+    }
 }
 
-main(); 
+main();
