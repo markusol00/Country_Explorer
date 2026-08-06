@@ -21,3 +21,11 @@ model Country {
   flag String?
   continent String
 }
+
+model User {
+  userId Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  email String @unique
+  passwordHash String
+}
