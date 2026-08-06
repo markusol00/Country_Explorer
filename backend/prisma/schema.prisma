@@ -20,4 +20,29 @@ model Country {
   currency String?
   flag String?
   continent String
+  users   UserCountry[]
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  email String @unique
+  passwordHash String
+  countries  UserCountry[]
+}
+
+model UserCountry{
+  id Int @id @default(autoincrement())
+  userId Int
+  countryId Int
+  status String
+  notes String?
+
+  user User @relation(fields: [userId], references: [id])
+  country   Country @relation(fields: [countryId], references: [id])
+  @@unique([userId, countryId])
+
+
+
 }
