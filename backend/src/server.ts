@@ -16,6 +16,18 @@ app.get("/countries", async (_request, response) => {
 
     response.json(countries);
 });
+app.get("/countries/:countryId", async (_request, response) => {
+    //Typecasting the countyId to a number
+    const countryId = Number(_request.params.countryId);
+
+    const country = await prisma.country.findUnique({
+        where: {
+            id: countryId
+        }
+    });
+    return response.json(country);
+
+})
 
 
 app.listen(PORT, () => {
