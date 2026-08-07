@@ -28,7 +28,62 @@ app.get("/countries/:countryId", async (_request, response) => {
     return response.json(country);
 
 })
+//Get all countries related to this user
+app.get("/userCountries/:id", async (_request, response) => {
+    const id = Number(_request.params.id);
+    const userCountries = await prisma.userCountry.findMany({
+        where: {
+        userId: id
+    }
+    });
+    return response.json(userCountries);
+})
 
+// Delete a country from the users List 
+app.delete("/my-countries/:id", async (_request, response) => {
+    const id =  Number(_request.params.id);
+    const deletedCountry = await prisma.userCountry.delete({
+        where: {
+            id: id
+        }
+        
+    });
+    return response.json(deletedCountry);
+})
+// Add a country to wishlist/visited/ or planning list
+app.post("/my-countries/:id", async (_request, response) => {
+    const countryId = Number(_request.params.id);
+    const userId = Number(_request.body.userId);
+    const status = String(_request.body.status);
+    
+    const addedCountry = await prisma.userCountry.create({
+        data: {
+            userId: userId,
+            countryId: countryId,
+            status: status
+        }
+    });
+    return response.json(addedCountry);
+});
+
+app.patch("/my-countries/:id", async (_request, response) => {
+    const id = Number(_request.params.id);
+
+    const status = String(_request.body.status);
+     const notes = String(_request.body.notes);
+
+    const updatedCountry = await prisma.userCountry.update({
+        where: {
+            id: id 
+        },
+        data: {
+            status: status,
+            notes: notes,
+        },
+
+    });
+    return response.json(updatedCountry);
+});
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
