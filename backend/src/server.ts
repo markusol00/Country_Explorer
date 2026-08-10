@@ -122,6 +122,38 @@ app.post("/auth/register", async (_request,response) =>{
     }
     });
 
+//Login to an account
+app.post("/auth/login", async (_request, response) => {
+    const email = String(_request.body.email);
+    const password = String(_request.body.password);
+
+    const user = await prisma.user.findUnique({
+        where: {
+            email: email
+        }
+    })
+    if(!user){
+        return response.status(401).json({
+            message: "Wrong email or password"
+        });
+    } 
+    const passwordIsCorrect = await bcrypt.compare(
+        password,
+        user.passwordHash
+    );
+
+    if(!passwordIsCorrect){
+        return response.status(401).json({
+            message: "Wrong email or password"
+        })
+    }
+    return response.status(200).json({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+    });
+});
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
