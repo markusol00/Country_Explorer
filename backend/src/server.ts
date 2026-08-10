@@ -1,5 +1,6 @@
 import express from "express";
-import { prisma } from "./lib/prisma.js";   
+import { prisma } from "./lib/prisma.js";  
+import bcrypt from "bcrypt";
 
 const app = express();
 const PORT = 3000;
@@ -83,7 +84,35 @@ app.get("/my-countries/:id", async (_request, response) => {
     });
     return response.json(myCountries);
 })
-//Add a country to the users list.
+//register an account
+app.post("/auth/register", async (_request,response) =>{
+    const firstName = String(_request.body.firstName);
+    const lastName = String(_request.body.lastName);
+    const mail = String(_request.body.mail);
+    const password = String(_request.body.password);
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    //Get the user if there is an existing user with the same mail-adress
+    const userExists = await prisma.user.findUnique({
+        where: {
+            email: mail
+        }
+    });
+    if(userExists){
+        console.log('User related to this mail already exists!')
+    }
+    else{
+        const registerUser = await prisma.user.create({
+            data: {
+                firstName: firstName,
+                lastName: lastName,
+                email: mail,
+                passwordHash: hashedPassword
+            }
+        });
+    }
+    });
+
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
