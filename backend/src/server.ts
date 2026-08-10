@@ -100,7 +100,9 @@ app.post("/auth/register", async (_request,response) =>{
         }
     });
     if(userExists){
-        console.log('User related to this mail already exists!')
+        return response.status(409).json({
+            message: "A user with this email already exists!"
+        })
     }
     else{
         const registerUser = await prisma.user.create({
@@ -111,7 +113,12 @@ app.post("/auth/register", async (_request,response) =>{
                 passwordHash: hashedPassword
             }
         });
-         return response.json(registerUser)
+         return response.status(201).json({
+            id: registerUser.id,
+            firstName: registerUser.firstName,
+            lastName: registerUser.lastName,
+            email: registerUser.email,
+         })
     }
     });
 
