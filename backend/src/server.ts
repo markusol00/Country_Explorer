@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "./lib/prisma.js";  
 import bcrypt from "bcrypt";
+import { register } from "node:module";
 
 const app = express();
 const PORT = 3000;
@@ -110,6 +111,7 @@ app.post("/auth/register", async (_request,response) =>{
                 passwordHash: hashedPassword
             }
         });
+         return response.json(registerUser)
     }
     });
 
