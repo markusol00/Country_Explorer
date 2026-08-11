@@ -2,6 +2,7 @@ import express from "express";
 import { prisma } from "./lib/prisma.js";  
 import bcrypt from "bcrypt";
 import { register } from "node:module";
+import jwt from "jsonwebtoken";
 
 const app = express();
 const PORT = 3000;
@@ -147,11 +148,14 @@ app.post("/auth/login", async (_request, response) => {
             message: "Wrong email or password"
         })
     }
+    //Creating a access-token
+    const accessToken = jwt.sign(
+        {userId: user.id},
+        "my-secret-key",
+        {expiresIn: "15m"}
+    )
     return response.status(200).json({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email
+        accessToken: accessToken
     });
 });
 
