@@ -159,6 +159,38 @@ app.post("/auth/login", async (_request, response) => {
     });
 });
 
+// sjekk
+app.get("/test-auth",async (request, response) => {
+    const authHeader = request.headers.authorization;
+
+    if (!authHeader) {
+        return response.status(401).json({
+            message: "Missing authorization header"
+        });
+    }
+
+    const parts = authHeader.split(" ");
+    const token = parts[1];
+
+      console.log(token);
+
+      if(!token){
+        return response.status(401).json({
+            message: "No token found"
+        })
+      }
+      const decoded = jwt.verify(
+        token,
+        "my-secret-key"
+      );
+
+      console.log(decoded);
+
+    return response.json({
+        message: "Token is valid!"
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
