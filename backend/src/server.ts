@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { register } from "node:module";
 import jwt from "jsonwebtoken";
 import {authMiddleware} from "./middleware/authMiddleware.js";
+import type { AuthRequest } from "./middleware/authMiddleware.js"
 
 const app = express();
 const PORT = 3000;
@@ -33,20 +34,37 @@ app.get("/countries/:countryId", async (_request, response) => {
 
 })
 // Delete a country from the users List 
-app.delete("/my-countries/:id", async (_request, response) => {
-    const id =  Number(_request.params.id);
+app.delete("/my-countries/:id", authMiddleware, async (_request : AuthRequest, response) => {
+    const userId = _request.userId;
+    if(userId == undefined){
+        return response.status(401).json({
+            message: "user not authenticated"
+        })
+    }
+    const countryId =  Number(_request.params.id);
     const deletedCountry = await prisma.userCountry.delete({
         where: {
-            id: id
+            userId_countryId: {
+                userId: userId,
+                countryId: countryId
+
+            }
+            
         }
         
     });
     return response.json(deletedCountry);
 })
 // Add a country to wishlist/visited/ or planning list
-app.post("/my-countries", async (_request, response) => {
+app.post("/my-countries", authMiddleware, async (_request: AuthRequest, response) => {
     const countryId = Number(_request.body.countryId);
-    const userId = Number(_request.body.userId);
+    
+    const userId = _request.userId;
+    if(userId == undefined){
+        return response.json(401).json({
+            message: "user not authenticated"
+        })
+    }
     const status = String(_request.body.status);
     
     const addedCountry = await prisma.userCountry.create({
@@ -59,15 +77,26 @@ app.post("/my-countries", async (_request, response) => {
     return response.json(addedCountry);
 });
 
-app.patch("/my-countries/:id", async (_request, response) => {
-    const id = Number(_request.params.id);
+app.patch("/my-countries/:id", authMiddleware, async (_request: AuthRequest, response) => {
+    const userId = _request.userId;
+     //check if userId from middleware exists. (To satisfy TypeScript)
+    if(userId == undefined){
+        return response.json(401).json({
+            message: "user not authenticated"
+        })
+    }
+
+    const countryId = Number(_request.params.id);
 
     const status = String(_request.body.status);
-     const notes = String(_request.body.notes);
+    const notes = String(_request.body.notes);
 
     const updatedCountry = await prisma.userCountry.update({
         where: {
-            id: id 
+            userId_countryId: {
+                userId: userId,
+                countryId: countryId
+            } 
         },
         data: {
             status: status,
@@ -78,11 +107,19 @@ app.patch("/my-countries/:id", async (_request, response) => {
     return response.json(updatedCountry);
 });
 //Find the users countries
-app.get("/my-countries/:id", async (_request, response) => {
-    const id = Number(_request.params.id);
+app.get("/my-countries", authMiddleware, async (_request : AuthRequest, response) => {
+    const userId = _request.userId;
+
+    //Checks if userId from middleware exists. (To satisfy TypeScript)
+    if (userId == undefined){
+        return response.json(401).json({
+            message: "user not authenticated"
+        })
+    }
+
     const myCountries = await prisma.userCountry.findMany({
         where: {
-            userId: id
+            userId: userId
         },
     });
     return response.json(myCountries);

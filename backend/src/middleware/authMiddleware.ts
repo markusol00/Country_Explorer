@@ -2,7 +2,7 @@ import type {  Request, Response, NextFunction} from "express";
 import jwt from "jsonwebtoken";
 
 //Type for a request that includes userId
-type AuthRequest = Request & {
+export type AuthRequest = Request & {
     userId?: number
 }
 
