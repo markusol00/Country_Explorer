@@ -25,12 +25,12 @@ export function authMiddleware(
             message: "No token found"
         })
     }
-    const decoded = jwt.verify(
+    try {
+        const decoded = jwt.verify(
         token,
         "my-secret-key"
     );
-
-    if (typeof decoded === "string" || !decoded.userId){
+     if (typeof decoded === "string" || !decoded.userId){
         return response.status(401).json({
             message: "Invalid token"
         })
@@ -38,6 +38,14 @@ export function authMiddleware(
     request.userId = decoded.userId;
 
     console.log(decoded);
+    
+    }
+    catch(error){
+        return response.status(401).json({
+            message: "Token expired or invalid token"
+        })
+    }
+   
 
     next();
 }
