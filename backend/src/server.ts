@@ -3,6 +3,7 @@ import { prisma } from "./lib/prisma.js";
 import bcrypt from "bcrypt";
 import { register } from "node:module";
 import jwt from "jsonwebtoken";
+import {authMiddleware} from "./middleware/authMiddleware.js";
 
 const app = express();
 const PORT = 3000;
@@ -160,7 +161,7 @@ app.post("/auth/login", async (_request, response) => {
 });
 
 // sjekk
-app.get("/test-auth",async (request, response) => {
+app.get("/test-auth",authMiddleware, async (request, response) => {
     const authHeader = request.headers.authorization;
 
     if (!authHeader) {
