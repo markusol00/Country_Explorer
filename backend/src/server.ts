@@ -5,7 +5,8 @@ import { register } from "node:module";
 import jwt from "jsonwebtoken";
 import {authMiddleware} from "./middleware/authMiddleware.js";
 import type { AuthRequest } from "./middleware/authMiddleware.js"
-import { jwtSecret }  from "./config.js";
+import { jwtSecret, refreshTokenSecret }  from "./config.js";
+
 
 const app = express();
 const PORT = 3000;
@@ -194,6 +195,13 @@ app.post("/auth/login", async (_request, response) => {
         jwtSecret,
         {expiresIn: "15m"}
     )
+    //Creating a refrsh-token
+    const refreshToken = jwt.sign(
+        {userId: user.id},
+        refreshTokenSecret,
+        {expirsIn: "7d"}
+    );
+    
     return response.status(200).json({
         accessToken: accessToken
     });
