@@ -5,9 +5,11 @@ import { register } from "node:module";
 import jwt from "jsonwebtoken";
 import {authMiddleware} from "./middleware/authMiddleware.js";
 import type { AuthRequest } from "./middleware/authMiddleware.js"
+import { jwtSecret }  from "./config.js";
 
 const app = express();
 const PORT = 3000;
+
 
 app.use(express.json());
 
@@ -189,7 +191,7 @@ app.post("/auth/login", async (_request, response) => {
     //Creating a access-token
     const accessToken = jwt.sign(
         {userId: user.id},
-        "my-secret-key",
+        jwtSecret,
         {expiresIn: "15m"}
     )
     return response.status(200).json({

@@ -1,10 +1,12 @@
 import type {  Request, Response, NextFunction} from "express";
 import jwt from "jsonwebtoken";
+import { jwtSecret } from "../config.js"
 
 //Type for a request that includes userId
 export type AuthRequest = Request & {
     userId?: number
 }
+
 
 export function authMiddleware(
     request: AuthRequest,
@@ -28,7 +30,7 @@ export function authMiddleware(
     try {
         const decoded = jwt.verify(
         token,
-        "my-secret-key"
+        jwtSecret
     );
      if (typeof decoded === "string" || !decoded.userId){
         return response.status(401).json({
@@ -45,7 +47,6 @@ export function authMiddleware(
             message: "Token expired or invalid token"
         })
     }
-   
 
     next();
 }
