@@ -1,10 +1,19 @@
 import express from "express";
-import { prisma } from "./lib/prisma.js";   
+import { prisma } from "./lib/prisma.js";  
+import bcrypt from "bcrypt";
+import { register } from "node:module";
+import jwt from "jsonwebtoken";
+import {authMiddleware} from "./middleware/authMiddleware.js";
+import type { AuthRequest } from "./middleware/authMiddleware.js"
+import { jwtSecret, refreshTokenSecret }  from "./config.js";
+import cookieParser from "cookie-parser";
+
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (_request, response) => {
     response.json({
@@ -29,20 +38,37 @@ app.get("/countries/:countryId", async (_request, response) => {
 
 })
 // Delete a country from the users List 
-app.delete("/my-countries/:id", async (_request, response) => {
-    const id =  Number(_request.params.id);
+app.delete("/my-countries/:id", authMiddleware, async (_request : AuthRequest, response) => {
+    const userId = _request.userId;
+    if(userId == undefined){
+        return response.status(401).json({
+            message: "user not authenticated"
+        })
+    }
+    const countryId =  Number(_request.params.id);
     const deletedCountry = await prisma.userCountry.delete({
         where: {
-            id: id
+            userId_countryId: {
+                userId: userId,
+                countryId: countryId
+
+            }
+            
         }
         
     });
     return response.json(deletedCountry);
 })
 // Add a country to wishlist/visited/ or planning list
-app.post("/my-countries", async (_request, response) => {
+app.post("/my-countries", authMiddleware, async (_request: AuthRequest, response) => {
     const countryId = Number(_request.body.countryId);
-    const userId = Number(_request.body.userId);
+    
+    const userId = _request.userId;
+    if(userId == undefined){
+        return response.json(401).json({
+            message: "user not authenticated"
+        })
+    }
     const status = String(_request.body.status);
     
     const addedCountry = await prisma.userCountry.create({
@@ -55,15 +81,26 @@ app.post("/my-countries", async (_request, response) => {
     return response.json(addedCountry);
 });
 
-app.patch("/my-countries/:id", async (_request, response) => {
-    const id = Number(_request.params.id);
+app.patch("/my-countries/:id", authMiddleware, async (_request: AuthRequest, response) => {
+    const userId = _request.userId;
+     //check if userId from middleware exists. (To satisfy TypeScript)
+    if(userId == undefined){
+        return response.json(401).json({
+            message: "user not authenticated"
+        })
+    }
+
+    const countryId = Number(_request.params.id);
 
     const status = String(_request.body.status);
-     const notes = String(_request.body.notes);
+    const notes = String(_request.body.notes);
 
     const updatedCountry = await prisma.userCountry.update({
         where: {
-            id: id 
+            userId_countryId: {
+                userId: userId,
+                countryId: countryId
+            } 
         },
         data: {
             status: status,
@@ -74,16 +111,195 @@ app.patch("/my-countries/:id", async (_request, response) => {
     return response.json(updatedCountry);
 });
 //Find the users countries
-app.get("/my-countries/:id", async (_request, response) => {
-    const id = Number(_request.params.id);
+app.get("/my-countries", authMiddleware, async (_request : AuthRequest, response) => {
+    const userId = _request.userId;
+
+    //Checks if userId from middleware exists. (To satisfy TypeScript)
+    if (userId == undefined){
+        return response.json(401).json({
+            message: "user not authenticated"
+        })
+    }
+
     const myCountries = await prisma.userCountry.findMany({
         where: {
-            userId: id
+            userId: userId
         },
     });
     return response.json(myCountries);
 })
-//Add a country to the users list.
+//register an account
+app.post("/auth/register", async (_request,response) =>{
+    const firstName = String(_request.body.firstName);
+    const lastName = String(_request.body.lastName);
+    const email = String(_request.body.mail);
+    const password = String(_request.body.password);
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    //Get the user if there is an existing user with the same mail-adress
+    const userExists = await prisma.user.findUnique({
+        where: {
+            email: email
+        }
+    });
+    if(userExists){
+        return response.status(409).json({
+            message: "A user with this email already exists!"
+        })
+    }
+    else{
+        const registerUser = await prisma.user.create({
+            data: {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                passwordHash: hashedPassword
+            }
+        });
+         return response.status(201).json({
+            id: registerUser.id,
+            firstName: registerUser.firstName,
+            lastName: registerUser.lastName,
+            email: registerUser.email,
+         })
+    }
+    });
+
+//Login to an account
+app.post("/auth/login", async (_request, response) => {
+    const email = String(_request.body.email);
+    const password = String(_request.body.password);
+
+    const user = await prisma.user.findUnique({
+        where: {
+            email: email
+        }
+    })
+    if(!user){
+        return response.status(401).json({
+            message: "Wrong email or password"
+        });
+    } 
+    const passwordIsCorrect = await bcrypt.compare(
+        password,
+        user.passwordHash
+    );
+
+    if(!passwordIsCorrect){
+        return response.status(401).json({
+            message: "Wrong email or password"
+        })
+    }
+    //Creating a access-token
+    const accessToken = jwt.sign(
+        {userId: user.id},
+        jwtSecret,
+        {expiresIn: "15m"}
+    )
+    //Creating a refrsh-token
+    const refreshToken = jwt.sign(
+        {userId: user.id},
+        refreshTokenSecret,
+        {expiresIn: "7d"}
+    );
+    //Sends refreshToken to cookie
+    response.cookie(
+        "refreshToken",
+        refreshToken,
+        {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        }
+    );
+
+    return response.status(200).json({
+        accessToken: accessToken
+    });
+});
+
+//Log out from an account
+app.post("/auth/logout", (_request, response) => {
+    response.clearCookie("refreshToken");
+    return response.status(200).json({
+        message: "logged out"
+    })
+});
+
+//Refresh the access-token
+app.post("/auth/refresh", async (_request, response) => {
+    const refreshToken = _request.cookies.refreshToken;
+    if(!refreshToken){
+        return response.status(401).json({
+            message: "No Refresh token found! "
+        })
+    }
+    try {
+        const decoded = jwt.verify(
+            refreshToken,
+            refreshTokenSecret
+        )
+            if(typeof decoded === "string" || !decoded.userId){
+                return response.status(401).json({
+                    message: "Invalid refresh token"
+                })
+            }
+            //creates new access token
+        const newAccessToken = jwt.sign(
+            {userId: decoded.userId},
+            jwtSecret,
+            {expiresIn: "15m"}
+
+        );
+
+    }
+    catch (error){
+        return response.status(401).json({
+            message: "Invalid or expired refresh token"
+        })
+
+    }
+
+
+    
+    
+    return response.json({
+        message: "Refresh token received"
+    });
+});
+
+// sjekk
+app.get("/test-auth",authMiddleware, async (request, response) => {
+    const authHeader = request.headers.authorization;
+
+    if (!authHeader) {
+        return response.status(401).json({
+            message: "Missing authorization header"
+        });
+    }
+
+    const parts = authHeader.split(" ");
+    const token = parts[1];
+
+      console.log(token);
+
+      if(!token){
+        return response.status(401).json({
+            message: "No token found"
+        })
+      }
+      const decoded = jwt.verify(
+        token,
+        "my-secret-key"
+      );
+
+      console.log(decoded);
+
+    return response.json({
+        message: "Token is valid!"
+    });
+});
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
