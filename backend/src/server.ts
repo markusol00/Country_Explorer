@@ -6,13 +6,14 @@ import jwt from "jsonwebtoken";
 import {authMiddleware} from "./middleware/authMiddleware.js";
 import type { AuthRequest } from "./middleware/authMiddleware.js"
 import { jwtSecret, refreshTokenSecret }  from "./config.js";
+import cookieParser from "cookie-parser";
 
 
 const app = express();
 const PORT = 3000;
 
-
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (_request, response) => {
     response.json({
@@ -131,14 +132,14 @@ app.get("/my-countries", authMiddleware, async (_request : AuthRequest, response
 app.post("/auth/register", async (_request,response) =>{
     const firstName = String(_request.body.firstName);
     const lastName = String(_request.body.lastName);
-    const mail = String(_request.body.mail);
+    const email = String(_request.body.mail);
     const password = String(_request.body.password);
 
     const hashedPassword = await bcrypt.hash(password, 10)
     //Get the user if there is an existing user with the same mail-adress
     const userExists = await prisma.user.findUnique({
         where: {
-            email: mail
+            email: email
         }
     });
     if(userExists){
@@ -151,7 +152,7 @@ app.post("/auth/register", async (_request,response) =>{
             data: {
                 firstName: firstName,
                 lastName: lastName,
-                email: mail,
+                email: email,
                 passwordHash: hashedPassword
             }
         });
@@ -215,6 +216,56 @@ app.post("/auth/login", async (_request, response) => {
 
     return response.status(200).json({
         accessToken: accessToken
+    });
+});
+
+//Log out from an account
+app.post("/auth/logout", (_request, response) => {
+    response.clearCookie("refreshToken");
+    return response.status(200).json({
+        message: "logged out"
+    })
+});
+
+//Refresh the access-token
+app.post("/auth/refresh", async (_request, response) => {
+    const refreshToken = _request.cookies.refreshToken;
+    if(!refreshToken){
+        return response.status(401).json({
+            message: "No Refresh token found! "
+        })
+    }
+    try {
+        const decoded = jwt.verify(
+            refreshToken,
+            refreshTokenSecret
+        )
+            if(typeof decoded === "string" || !decoded.userId){
+                return response.status(401).json({
+                    message: "Invalid refresh token"
+                })
+            }
+            //creates new access token
+        const newAccessToken = jwt.sign(
+            {userId: decoded.userId},
+            jwtSecret,
+            {expiresIn: "15m"}
+
+        );
+
+    }
+    catch (error){
+        return response.status(401).json({
+            message: "Invalid or expired refresh token"
+        })
+
+    }
+
+
+    
+    
+    return response.json({
+        message: "Refresh token received"
     });
 });
 
