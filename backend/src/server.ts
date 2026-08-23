@@ -199,9 +199,20 @@ app.post("/auth/login", async (_request, response) => {
     const refreshToken = jwt.sign(
         {userId: user.id},
         refreshTokenSecret,
-        {expirsIn: "7d"}
+        {expiresIn: "7d"}
     );
-    
+    //Sends refreshToken to cookie
+    response.cookie(
+        "refreshToken",
+        refreshToken,
+        {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        }
+    );
+
     return response.status(200).json({
         accessToken: accessToken
     });
