@@ -7,6 +7,7 @@ import {authMiddleware} from "./middleware/authMiddleware.js";
 import type { AuthRequest } from "./middleware/authMiddleware.js"
 import { jwtSecret, refreshTokenSecret }  from "./config.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 
 const app = express();
@@ -14,6 +15,11 @@ const PORT = 3000;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+    cors({
+        origin: "http://localhost:5173"
+    })
+)
 
 app.get("/", (_request, response) => {
     response.json({

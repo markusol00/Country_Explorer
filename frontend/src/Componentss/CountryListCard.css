@@ -1,0 +1,41 @@
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+}
+.card h2{
+    margin: 0;
+
+}
+.card p{
+    margin-top: 0;
+}
+
+.card section{
+    display: flex;
+    gap: 15px;
+}
+.flagicon{
+    font-size: 3rem;
+    justify-content: center;
+}
+.card div{
+    justify-content: center;
+}
+.linkButton{
+    align-content: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    color: black;
+}
