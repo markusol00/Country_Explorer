@@ -1,8 +1,8 @@
 import { Link, Links } from "react-router";
-
+import "./NavigationMenu.css";
 function NavigationMenu() {
   return (
-    <div>
+    <div className="navigationmenu">
       <nav>
         <ul>
           <li>
@@ -18,11 +18,6 @@ function NavigationMenu() {
             <Link to="/countries">Profil</Link>
           </li>
         </ul>
-        <h1>Logo</h1>
-        <h1>Land</h1>
-        <h1>Mine land</h1>
-        <h1>Dashbord</h1>
-        <h1>Logg ut</h1>
       </nav>
     </div>
   );

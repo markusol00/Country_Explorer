@@ -1,0 +1,38 @@
+.navigationmenu{
+    justify-content: left;
+    border-right: 1px solid #ccc;
+    width: 25%;
+}
+.navigationmenu nav ul li{
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    font-size: 15px;
+    list-style-type: none;
+    text-decoration: none;
+    list-style: none;
+    border-radius: 5px;
+}
+.navigationmenu nav ul li:hover{
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    font-size: 15px;
+    list-style-type: none;
+    text-decoration: none;
+    list-style: none;
+    background-color: #b5cfc2de;
+}
+.navigationmenu nav ul li:active{
+    background-color: #b5cfc2de;
+}
+
+.navigationmenu a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+.navigationmenu ul  {
+    text-decoration: none;
+      color: inherit;
+ 
+}
