@@ -27,3 +27,4 @@ function NavigationMenu() {
     </div>
   );
 }
+export default NavigationMenu;
