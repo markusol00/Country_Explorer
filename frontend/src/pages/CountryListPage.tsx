@@ -37,7 +37,7 @@ function CountryListPage() {
 
       <div>
         {countries.map((country) => {
-          if (country.name.includes(searchResult)) {
+          if (country.name.toLowerCase().includes(searchResult.toLowerCase())) {
             return <CountryListCard country={country} key={country.id} />;
           }
         })}
