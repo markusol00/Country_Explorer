@@ -18,14 +18,28 @@ function CountryListPage() {
     }
     fetchCountries();
   }, []);
+
+  //Function for searching countries by name.
+  const [searchResult, setSearchResult] = useState("");
+  function handleSearchResultChange(event) {
+    setSearchResult(event.target.value);
+  }
+
   return (
     <div>
       <h1>Land</h1>
       <p>Utforsk alle verdens land</p>
+      <label>
+        Søk etter land:
+        <input value={searchResult} onChange={handleSearchResultChange}></input>
+      </label>
+      <p>{searchResult}</p>
 
       <div>
         {countries.map((country) => {
-          return <CountryListCard country={country} key={country.id} />;
+          if (country.name.includes(searchResult)) {
+            return <CountryListCard country={country} key={country.id} />;
+          }
         })}
       </div>
     </div>
