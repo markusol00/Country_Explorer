@@ -61,7 +61,9 @@ npm install
 Create a `.env` file in the backend directory and the required environment variables:
 
 DATABASE_URL=your_postgresql_connection_string
+
 JWT_SECRET=your_jwt_secret
+
 REFRESH_TOKEN_SECRET=your_refresh_token_secret
 
 ### 4. Set up the database
