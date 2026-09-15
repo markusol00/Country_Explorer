@@ -1,5 +1,7 @@
 Country Explorer is a fullstack web application for exploring countries and keep track of countries you have visited, plan to visit or even want to visit.
-The application allow the user to either register an account or just log into a demo-account
+The application allow the user to either register an account or just log into a demo-account.
+
+The goal of this project is to improve my fullstack development skills, write clean code, and exploring new technologies.
 
 ## Features
 - Register an account 
