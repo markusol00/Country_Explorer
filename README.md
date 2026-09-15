@@ -10,19 +10,25 @@ The application allow the user to either register an account or just log into a 
 - Track visited countries (FRONTEND NOT IMPLEMENTED YET)
 - Track countries you want to visit
 
-##Tech Stack
+## Tech Stack
 
-###Frontend
+### Frontend
 - React
 - TypeScript
 - Vite
 - React Router
 
-###Backend
+### Backend
 - Node.js
 - Express
 - TypeScript
 - Prisma ORM
 
-###Database
+### Database
 - PostgreSQL
+
+### Authentication
+- JWT
+- Refresh tokens
+- bcrypt
+- HttpOnly cookies
