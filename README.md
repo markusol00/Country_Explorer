@@ -50,7 +50,8 @@ git clone https://github.com/markusol00/Country_Explorer.git
 cd country-explorer
 
 ### 2. Install backend dependencies
-cd backend
+
+cd backend 
 npm install
 
 ### 3. Environment variables
