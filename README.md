@@ -35,5 +35,49 @@ The goal of this project is to improve my fullstack development skills, write cl
 - bcrypt
 - HttpOnly cookies
 
-##Status:
+## Status:
 - Under deveopment
+
+## Installation
+### Prerequisites
+Make sure you have installed:
+- Node.js
+- PostgreeSQL
+- npm
+
+### 1. Clone the repository
+git clone https://github.com/markusol00/Country_Explorer.git
+cd country-explorer
+
+### 2. Install backend dependencies
+cd backend
+npm install
+
+### 3. Environment variables
+Create a `.env` file in the backend directory and the required environment variables:
+
+DATABASE_URL=your_postgresql_connection_string
+JWT_SECRET=your_jwt_secret
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+
+### 4. Set up the database
+Run the Prisma migrations:
+
+npx prisma migrate dev
+
+### 5. Start the backend
+
+npm run dev
+
+### 6. Install frontend dependencies
+
+cd frontend
+npm install
+
+### 7. Start the frontend
+
+npm run dev
+
+
+
+
