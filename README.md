@@ -51,7 +51,8 @@ cd country-explorer
 
 ### 2. Install backend dependencies
 
-cd backend \n
+cd backend
+
 npm install
 
 ### 3. Environment variables
