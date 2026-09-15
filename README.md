@@ -34,3 +34,6 @@ The goal of this project is to improve my fullstack development skills, write cl
 - Refresh tokens
 - bcrypt
 - HttpOnly cookies
+
+##Status:
+- Under deveopment
