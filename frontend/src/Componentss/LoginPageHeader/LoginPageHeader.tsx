@@ -5,11 +5,13 @@ function LoginPageHeader() {
   return (
     <div>
       <nav className="loginPageMenu">
-        <img
-          src={loginPagePhoto}
-          alt="Country Explorer logo"
-          className="headerLogo"
-        />
+        <Link to={"/"}>
+          <img
+            src={loginPagePhoto}
+            alt="Country Explorer logo"
+            className="headerLogo"
+          />
+        </Link>
         <ul>
           <li>
             <Link to={"/countries"} className="loginPage-menuButton">
@@ -17,7 +19,7 @@ function LoginPageHeader() {
             </Link>
           </li>
           <li>
-            <Link to={"/countries"} className="loginPage-menuButton">
+            <Link to={"/about"} className="loginPage-menuButton">
               Om appen
             </Link>
           </li>
