@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import loginPagePhoto from "../assets/loginPage-photo.png";
 import "./LoginPage.css";
+import LoginPageHeader from "../Componentss/LoginPageHeader/LoginPageHeader";
 
 function LoginPage() {
   async function clickDemo() {
@@ -28,6 +29,7 @@ function LoginPage() {
   return (
     <>
       <div>
+        <LoginPageHeader />
         <section className="main-section">
           <article>
             <h1>Utforsk verden.</h1>
