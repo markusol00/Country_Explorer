@@ -1,8 +1,8 @@
 :root {
   font-family: system-ui, sans-serif;
-  background-color: antiquewhite;
+  background-color: white;
 }
 
 #root {
-  margin: 30px;
+  margin: 15px;
 }

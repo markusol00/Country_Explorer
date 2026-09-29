@@ -1,0 +1,31 @@
+.loginPageMenu{
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    border-bottom: 1px solid black;
+}
+.loginPageMenu ul{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.loginPageMenu ul li{
+    display: flex;
+    gap: 1rem;
+    text-decoration: none;
+}
+
+.headerLogo{
+    height: 100px;
+    width: 120px;
+}
+
+/*Temporary styling to buttons, might be a common CSS class later*/
+.loginPage-menuButton{
+    background-color: darkgreen;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+}

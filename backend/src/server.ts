@@ -138,7 +138,7 @@ app.get("/my-countries", authMiddleware, async (_request : AuthRequest, response
 app.post("/auth/register", async (_request,response) =>{
     const firstName = String(_request.body.firstName);
     const lastName = String(_request.body.lastName);
-    const email = String(_request.body.mail);
+    const email = String(_request.body.email);
     const password = String(_request.body.password);
 
     const hashedPassword = await bcrypt.hash(password, 10)
