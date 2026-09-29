@@ -33,3 +33,19 @@
     /*Temporarily solution (margin-left) */
     margin-left: 1rem;
 }
+.login-buttons{
+    display: flex;
+    margin-bottom: 20px;
+}
+.login-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+
+.register-section {
+  margin: 2rem;
+}
+
