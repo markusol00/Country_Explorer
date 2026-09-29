@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import loginPagePhoto from "../assets/loginPage-photo.png";
 import "./LoginPage.css";
 import LoginPageHeader from "../Componentss/LoginPageHeader/LoginPageHeader";
+import LoginForm from "../Componentss/LoginForm/LoginForm";
 
 function LoginPage() {
   async function clickDemo() {
@@ -32,23 +33,33 @@ function LoginPage() {
         <LoginPageHeader />
         <section className="main-section">
           <article>
-            <h1>Utforsk verden.</h1>
-            <h2>Planlegg dine eventyr!</h2>
+            <h1>Plan your journeys!</h1>
             <p>
-              Country Explorer hjelper deg med å holde oversikt over land du
-              ønsker å besøke, planlegger å besøke eller allerede har besøkt.
+              Country Explorer helps you keep track of the countries you want to
+              visit, plan your trips, or review countries you've already
+              visited.
             </p>
-            <Link
-              to={"/countries"}
-              className={"demo-login-button"}
-              onClick={clickDemo}
-            >
-              Demo login
-            </Link>
-            <Link to={"/countries"} className="show-countries-button">
-              Se Land
-            </Link>
-            <p>Om appen</p>
+            <div className="login-buttons">
+              <Link
+                to={"/countries"}
+                className={"demo-login-button"}
+                onClick={clickDemo}
+              >
+                Demo login
+              </Link>
+              <Link to={"/countries"} className="show-countries-button">
+                Show countries
+              </Link>
+            </div>
+            <div className="login-container">
+              <LoginForm />
+              <article className="register-section">
+                <h2>Don't have an accout?</h2>
+                <Link to={"/register"} className="register-button">
+                  Register here!
+                </Link>
+              </article>
+            </div>
           </article>
           <img src={loginPagePhoto} alt="Reisende ved tog i fjellandskap" />
         </section>

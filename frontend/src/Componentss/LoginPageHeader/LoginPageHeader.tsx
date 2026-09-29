@@ -15,12 +15,12 @@ function LoginPageHeader() {
         <ul>
           <li>
             <Link to={"/countries"} className="loginPage-menuButton">
-              Land
+              Countries
             </Link>
           </li>
           <li>
             <Link to={"/about"} className="loginPage-menuButton">
-              Om appen
+              About
             </Link>
           </li>
           <li>
