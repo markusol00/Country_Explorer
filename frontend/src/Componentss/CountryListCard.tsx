@@ -4,18 +4,24 @@ import "./CountryListCard.css";
 
 type CountryListCardProps = {
   country: Country;
+  status?: string; //added
 };
 
-function CountryListCard({ country }: CountryListCardProps) {
+function CountryListCard({ country, status }: CountryListCardProps) {
   return (
     <>
       <div className="card">
-        <section>
-          <span className="flagicon">{country.flag}</span>
-          <div>
-            <h2>{country.name}</h2>
-            <p>{country.continent}</p>
+        <section className="status-container">
+          <div className="country-information-container">
+            <span className="flagicon">{country.flag}</span>
+            <div className="countryinfo">
+              <h2 className={country.name.length > 15 ? "long-name" : ""}>
+                {country.name}
+              </h2>
+              <p className="continent">{country.continent}</p>
+            </div>
           </div>
+          <p className={`status ${status}`}>{status}</p>
         </section>
         <Link to={`/countries/${country.id}`} className="linkButton">
           Vis

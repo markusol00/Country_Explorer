@@ -35,8 +35,9 @@ function LoginForm() {
         return;
       }
       const data = await response.json();
+      sessionStorage.setItem("accessToken", data.accessToken);
       console.log("Login successful:", data);
-      navigate("/dashboard");
+      navigate("/mycountries");
     } catch (err) {
       console.log(err);
     }

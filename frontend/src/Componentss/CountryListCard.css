@@ -7,12 +7,20 @@
   display: flex;
   justify-content: space-between;
   height: 50px;
+  width: 600px;
 }
 .card h2{
     margin: 0;
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.1;
 
 }
-.card p{
+.card h2.long-name {
+    font-size: 1rem;
+    max-width: 400px;
+}
+.continent{
     margin-top: 0;
 }
 
@@ -38,4 +46,33 @@
     border-radius: 5px;
     text-decoration: none;
     color: black;
+}
+.country-information-container{
+    display: flex;
+    gap: 1rem;
+
+}
+
+.status-container{
+    justify-content: space-between;
+
+}
+.status{
+    align-content: center;
+    margin:0px 15px 0px 0px;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: white;
+    font-weight:bold;
+}
+.status.wishlist {
+    background-color: lightblue;
+}
+
+.status.planned {
+    background-color: orange;
+}
+
+.status.visited {
+    background-color: lightgreen;
 }
