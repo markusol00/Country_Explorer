@@ -70,6 +70,7 @@ app.post("/my-countries", authMiddleware, async (_request: AuthRequest, response
     const countryId = Number(_request.body.countryId);
     
     const userId = _request.userId;
+    console.log("POST userId:", userId);
     if(userId == undefined){
         return response.json(401).json({
             message: "user not authenticated"
@@ -119,6 +120,7 @@ app.patch("/my-countries/:id", authMiddleware, async (_request: AuthRequest, res
 //Find the users countries
 app.get("/my-countries", authMiddleware, async (_request : AuthRequest, response) => {
     const userId = _request.userId;
+    
 
     //Checks if userId from middleware exists. (To satisfy TypeScript)
     if (userId == undefined){
@@ -131,6 +133,9 @@ app.get("/my-countries", authMiddleware, async (_request : AuthRequest, response
         where: {
             userId: userId
         },
+        include: {
+        country: true
+    }
     });
     return response.json(myCountries);
 })

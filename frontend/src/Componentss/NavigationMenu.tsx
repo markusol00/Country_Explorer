@@ -9,7 +9,7 @@ function NavigationMenu() {
             <Link to="/countries">Land</Link>
           </li>
           <li>
-            <Link to="/countries">Mine land</Link>
+            <Link to="/mycountries">Mine land</Link>
           </li>
           <li>
             <Link to="/countries">Dashbord</Link>

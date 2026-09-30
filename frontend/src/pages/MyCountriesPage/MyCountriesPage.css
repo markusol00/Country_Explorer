@@ -1,0 +1,28 @@
+.statusFilterbar{
+    margin-bottom: 2rem
+
+}
+.statusFilterbar ul {
+    display: flex;
+    flex-direction: row;
+    gap: 3.5rem;
+}
+.statusFilterbar ul li {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
+.statusFilterbar ul li button{
+    background: none;
+    border: none;
+}
+.statusFilterbar ul li button.selected{
+    color: green;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+}
+.statusFilterbar ul li button:hover{
+    color: green;
+    border-bottom: 1px solid #ccc;
+}
+
