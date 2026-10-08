@@ -43,6 +43,30 @@ app.get("/countries/:countryId", async (_request, response) => {
     return response.json(country);
 
 })
+//Get a user country
+app.get("/my-countries/:countryId", authMiddleware, async(_request : AuthRequest, response) =>{
+    const userId = _request.userId;
+
+    if(userId == undefined){
+        return response.status(401).json({
+            message: "user not authenticated"
+        })
+    }
+    const countryId = Number(_request.params.countryId);
+
+    const userCountry = await prisma.userCountry.findUnique({
+        where: {
+            userId_countryId : {
+                userId: userId,
+                countryId: countryId
+
+            } 
+        }
+
+    });
+    return response.json(userCountry);
+})
+
 // Delete a country from the users List 
 app.delete("/my-countries/:id", authMiddleware, async (_request : AuthRequest, response) => {
     const userId = _request.userId;
@@ -88,35 +112,38 @@ app.post("/my-countries", authMiddleware, async (_request: AuthRequest, response
     return response.json(addedCountry);
 });
 
-app.patch("/my-countries/:id", authMiddleware, async (_request: AuthRequest, response) => {
+app.put("/my-countries/:countryId", authMiddleware, async (_request: AuthRequest, response) => {
     const userId = _request.userId;
      //check if userId from middleware exists. (To satisfy TypeScript)
     if(userId == undefined){
-        return response.json(401).json({
+        return response.status(401).json({
             message: "user not authenticated"
         })
     }
 
-    const countryId = Number(_request.params.id);
+    const countryId = Number(_request.params.countryId);
 
     const status = String(_request.body.status);
-    const notes = String(_request.body.notes);
 
-    const updatedCountry = await prisma.userCountry.update({
+    const updatedCountry = await prisma.userCountry.upsert({
         where: {
             userId_countryId: {
                 userId: userId,
                 countryId: countryId
-            } 
+            }, 
         },
-        data: {
+        update:{
+            status : status
+        },
+        create: {
+            userId: userId,
+            countryId: countryId,
             status: status,
-            notes: notes,
         },
-
     });
     return response.json(updatedCountry);
 });
+
 //Find the users countries
 app.get("/my-countries", authMiddleware, async (_request : AuthRequest, response) => {
     const userId = _request.userId;

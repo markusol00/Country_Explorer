@@ -1,6 +1,5 @@
 import "./App.css";
-//import CountriesPage from "./pages/CountriesPage";
-import CountryDetailPage from "./pages/CountryDetailPage";
+import CountryDetailPage from "./pages/CountryDetailPage/CountryDetailPage";
 import CountryListPage from "./pages/CountryListPage";
 import { Routes, Route } from "react-router";
 import MainLayout from "../src/Layout/MainLayout";
