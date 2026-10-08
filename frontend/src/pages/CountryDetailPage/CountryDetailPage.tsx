@@ -12,13 +12,13 @@ import capitalIcon from "../../assets/icons/capitalIcon.svg";
 function CountryDetailPage() {
   //Accesstoken
   const accessToken = sessionStorage.getItem("accessToken");
+  console.log("Access token:", accessToken);
   //Type of Country if the user is not signed in
   const [country, setCountry] = useState<Country | null>(null);
 
   //Type of UserCountry if the user is signed in
   const [userCountry, setUserCountry] = useState<UserCountry | null>(null);
 
-  const [status, setStatus] = useState("");
   const id = useParams();
   const countryId = id.countryCode;
   let navigate = useNavigate();
@@ -61,8 +61,8 @@ function CountryDetailPage() {
   }, [countryId, accessToken]);
 
   async function ChangeStatus(event: React.ChangeEvent<HTMLSelectElement>) {
-    const status = event.target.value;
-    console.log(status);
+    const changedStatus = event.target.value;
+
     try {
       const response = await fetch(
         `http://localhost:3000/my-countries/${countryId}`,
@@ -73,7 +73,7 @@ function CountryDetailPage() {
             Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify({
-            status: status,
+            status: changedStatus,
           }),
         },
       );
@@ -82,7 +82,7 @@ function CountryDetailPage() {
         return;
       }
       const data = await response.json();
-      console.log(data);
+      setUserCountry(data);
     } catch (error) {
       return false;
     }
@@ -92,7 +92,7 @@ function CountryDetailPage() {
     <div className="country-detail-section">
       <button onClick={() => navigate(-1)}> ← Go back</button>
       <img src={demonorway} className="header-photo" alt="demo picture" />
-      <section className="midlertidig">
+      <section className="top-section">
         <div className="geographic-info-container">
           <span className="flag-icon">{country?.flag}</span>
           <div>
@@ -100,12 +100,20 @@ function CountryDetailPage() {
             <h2>{country?.continent}</h2>
           </div>
         </div>
-        <select onChange={ChangeStatus}>
-          <option value="">{userCountry?.status}</option>
-          <option value="visited">Visited</option>
-          <option value="planning">Planning</option>
-          <option value="wishlist">Wishlist</option>
-        </select>
+        {accessToken && (
+          <select
+            value={userCountry?.status ?? ""}
+            onChange={ChangeStatus}
+            className={`country-status ${userCountry?.status ?? ""}`}
+          >
+            <option value="" disabled>
+              + Select a status
+            </option>
+            <option value="visited">Visited</option>
+            <option value="planning">Planning</option>
+            <option value="wishlist">Wishlist</option>
+          </select>
+        )}
       </section>
       <section>
         <div className="country-detail-container">
@@ -132,7 +140,7 @@ function CountryDetailPage() {
             alt="Country Explorer logo"
             className="headerLogo"
           />
-          <p>population</p>
+          <p>Population</p>
           <p>{country?.population || "Undefined"}</p>
         </div>
         <div className="country-detail-container">
