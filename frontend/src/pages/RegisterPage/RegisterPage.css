@@ -1,0 +1,28 @@
+.outerContainer{
+    display: flex;
+    justify-content: center;
+}
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    background: darkseagreen;
+    padding: 2.5rem;
+    border-radius: 10px
+}
+
+
+.nameSection{
+    display: flex;
+      gap: 1rem;
+}
+.inputfield{
+    flex-direction: column;
+    display: flex;
+    margin-bottom: 1.5rem;
+
+}
+.inputfield input{
+    height: 25px;
+    flex-shrink: 0;
+
+}
