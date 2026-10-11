@@ -121,6 +121,7 @@ app.put("/my-countries/:countryId", authMiddleware, async (_request: AuthRequest
         })
     }
 
+
     const countryId = Number(_request.params.countryId);
 
     const status = String(_request.body.status);

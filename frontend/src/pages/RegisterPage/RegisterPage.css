@@ -1,0 +1,46 @@
+.outerContainer{
+    display: flex;
+    justify-content: center;
+}
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 128, 0, 0.26);
+    padding: 2.5rem;
+    border-radius: 10px
+}
+.formContainer button{
+    background-color: darkgreen;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+.nameSection{
+    display: flex;
+      gap: 1rem;
+}
+.register-inputfield{
+    flex-direction: column;
+    display: flex;
+    margin-bottom: 1.5rem;
+
+}
+.register-inputfield input{
+    height: 25px;
+    flex-shrink: 0;
+
+}
+.already-having-an-accout-section{
+    display: flex;
+    gap: 1rem;
+    align-content: center;
+}
+.already-having-an-accout-section a{
+    align-content: center;
+}

@@ -6,6 +6,7 @@ import MainLayout from "../src/Layout/MainLayout";
 import LoginPage from "./pages/LoginPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import MyCountriesPage from "./pages/MyCountriesPage/MyCountriesPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route element={<MainLayout />}>
           <Route path="/countries" element={<CountryListPage />} />
           <Route
