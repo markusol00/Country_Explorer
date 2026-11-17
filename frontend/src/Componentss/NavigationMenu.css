@@ -1,7 +1,11 @@
 .navigationmenu{
     justify-content: left;
-    border-right: 1px solid #ccc;
-    width: 25%;
+  border-right: 1px solid #ccc;
+  width: 25%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  align-self: flex-start;
 }
 .navigationmenu nav ul li{
     margin-bottom: 1.5rem;
@@ -24,8 +28,17 @@
 .navigationmenu nav ul li:active{
     background-color: #b5cfc2de;
 }
+.navigationmenu a.active-link {
+  background-color: #b5cfc2de;
+  color: #234d38;
+  border-radius: 5px;
+
+}
 
 .navigationmenu a {
+    display: block;
+  padding: 15px 20px;
+  border-radius: 10px;
   text-decoration: none;
   color: inherit;
 }
@@ -34,5 +47,21 @@
 .navigationmenu ul  {
     text-decoration: none;
       color: inherit;
+      display: flex;
+      flex-direction: column;
  
+}
+.logout-button {
+    background: none;
+	color: rgb(244, 1, 1);
+    background-color: rgba(241, 110, 110, 0.51);
+    border-radius: 5px;
+    padding: 5px;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+    border: solid 1px black;
+    max-width: 120px;
+    font-weight: bold;
 }
