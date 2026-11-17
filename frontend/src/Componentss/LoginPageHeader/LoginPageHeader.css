@@ -3,6 +3,7 @@
     justify-content: space-between;
     background-color: white;
     border-bottom: 1px solid black;
+    height: 85px;
 }
 .loginPageMenu ul{
     display: flex;
@@ -16,8 +17,8 @@
 }
 
 .headerLogo{
-    height: 100px;
-    width: 120px;
+    height: 80px;
+    width: 100px;
 }
 
 /*Temporary styling to buttons, might be a common CSS class later*/
