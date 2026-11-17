@@ -1,22 +1,16 @@
 import "./LoginForm.css";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
-import { useNavigate } from "react-router";
 
 function LoginForm() {
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  //
-  function handleUsernameChange(event) {
-    setMail(event.target.value);
-  }
-  function handlePasswordChange(event) {
-    setPassword(event.target.value);
-  }
+  async function handleLogin(event: React.SubmitEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log("handleLogin kjører!");
 
-  async function handleLogin() {
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
@@ -28,45 +22,57 @@ function LoginForm() {
           password: password,
         }),
       });
-      console.log("Status:", response.status);
 
       if (!response.ok) {
-        console.log("Wrong email or password");
+        console.error("Wrong email or password");
         return;
       }
+
       const data = await response.json();
       sessionStorage.setItem("accessToken", data.accessToken);
-      console.log("Login successful:", data);
       navigate("/mycountries");
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 
   return (
-    <>
-      <form className="login">
-        <h2>Login</h2>
-        <label htmlFor="Username">Email:</label>
-        <input
-          value={mail}
-          onChange={handleUsernameChange}
-          className="inputfield"
-        ></input>
-        <label htmlFor="Username" className="password-field">
-          Password:
-        </label>
-        <input
-          value={password}
-          onChange={handlePasswordChange}
-          type="password"
-          className="inputfield"
-        ></input>
-        <button onClick={handleLogin}>
-          <Link to="/dashboard">Login</Link>
-        </button>
-      </form>
-    </>
+    <form className="login" onSubmit={handleLogin}>
+      <h2>Welcome back!</h2>
+      <p className="login-description">Log in to continue your adventures.</p>
+
+      <label htmlFor="email">Email</label>
+      <input
+        id="email"
+        value={mail}
+        onChange={(event) => setMail(event.target.value)}
+        placeholder="Enter your email"
+        required
+      />
+
+      <label htmlFor="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        placeholder="Enter your password"
+        required
+      />
+
+      <button
+        type="submit"
+        className="login-submit-button"
+        onClick={() => console.log("Knappen ble klikket!")}
+      >
+        Log in
+      </button>
+
+      <p className="register-text">
+        Don't have an account? <Link to="/register">Register here</Link>
+      </p>
+    </form>
   );
 }
+
 export default LoginForm;
