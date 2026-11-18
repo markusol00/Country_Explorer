@@ -56,29 +56,65 @@ function RegisterPage() {
   return (
     <div className="outerContainer">
       <form className="formContainer">
-        <h1>Register </h1>
-        <p>Please fill out this form to make an account </p>
+        <div className="register-heading">
+          <h1>Create an account!</h1>
+          <p>Join Country Explorer and start exploring the world!</p>
+        </div>
+
         <section className="nameSection">
           <div className="register-inputfield">
-            <label>First name:</label>
-            <input type="text" onChange={handleFirstNameChange} />
+            <label htmlFor="firstName">First name:</label>
+            <input
+              id="firstname
+            "
+              type="text"
+              placeholder="Enter your first name"
+              value={firstName}
+              onChange={handleFirstNameChange}
+            />
           </div>
+
           <div className="register-inputfield">
             <label>Last name:</label>
-            <input type="text" onChange={handleLastNameChange} />
+            <input
+              id="lastname"
+              type="text"
+              placeholder="Enter your last name"
+              value={lastName}
+              onChange={handleLastNameChange}
+            />
           </div>
         </section>
+
         <div className="register-inputfield">
-          <label>E-mail:</label>
-          <input type="text" onChange={handleMailChange} />
+          <label htmlFor="register-email">Email:</label>
+          <input
+            id="register-email"
+            type="text"
+            placeholder="Enter your email"
+            value={email}
+            onChange={handleMailChange}
+          />
         </div>
+
         <div className="register-inputfield">
           <label>Password:</label>
-          <input type="password" onChange={handlePasswordChange} />
+          <input
+            id="register-password"
+            type="password"
+            placeholder="Create a password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
         </div>
-        <button type="button" onClick={handleRegister}>
+        <button
+          type="button"
+          className="register-submit-button"
+          onClick={handleRegister}
+        >
           Sign up!
         </button>
+
         <div className="already-having-an-accout-section">
           <p>Already having an account?</p>
           <Link to="/">Log in.</Link>
